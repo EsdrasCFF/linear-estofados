@@ -1,0 +1,108 @@
+O app está quase perfeito, mas eu NÃO gostei da versão mobile.
+
+Quero ajustes APENAS no MOBILE (sm e abaixo).
+NÃO altere o layout do desktop.
+NÃO altere a Home no desktop.
+MANTER o footer exatamente como está (desktop e mobile).
+
+========================
+OBJETIVO MOBILE
+========================
+No mobile, o layout deve ficar o mais próximo possível do design do screenshot mobile da Home:
+- Hero em formato “card” com bordas bem arredondadas e overlay escuro
+- Botões empilhados/centralizados como no screenshot
+- Seções com espaçamento menor, tipografia equilibrada
+- Cards grandes, com cantos arredondados, sombras leves
+- Grid que vira 1 coluna no mobile, sem ficar apertado
+
+========================
+REGRAS IMPORTANTES
+========================
+1) Alterar somente estilos abaixo de md (mobile).
+   - Use Tailwind com md: para preservar desktop.
+   - Exemplo: classes base para mobile + md: para desktop.
+2) Não mexer no Footer (manter igual).
+3) Preservar o Home desktop (visual e estrutura).
+4) Não mudar textos e nem ordem das seções na Home.
+5) Não quebrar as páginas existentes: Home, Coleções, Produto, Guia.
+
+========================
+HEADER MOBILE (NOVO)
+========================
+No mobile, o header deve ficar:
+- Logo “LINEAR STORE” à esquerda
+- Ícone de busca opcional (se já existe)
+- Ícone hamburger à direita
+
+Ao clicar no hamburger:
+- Abrir MENU LATERAL (Drawer) vindo da direita ou esquerda (padrão moderno)
+- Com overlay escuro no fundo
+- Links do menu:
+  Início
+  Sofás
+  Cabeceiras
+  Arte em Tecido
+  Processo
+  Guia de Design
+- Incluir também o CTA “Fale com um especialista” dentro do drawer (botão)
+
+Comportamento:
+- Ao clicar em um link, fechar o drawer automaticamente
+- Manter o header fixo no topo no mobile (sticky/top-0)
+
+========================
+HOME MOBILE (AJUSTES VISUAIS)
+========================
+Ajustar a Home somente no mobile para ficar semelhante ao screenshot:
+
+HERO:
+- Altura controlada no mobile (ex: min-h-[420px] / h-[480px])
+- Hero como card com rounded-3xl
+- Background image com overlay gradiente escuro
+- Texto com tamanho menor que desktop e quebre em 3/4 linhas
+- Botões empilhados verticalmente no mobile (w-full, max-w, gap)
+
+CATEGORIAS:
+- Cards em 1 coluna no mobile (ou carrossel horizontal se quiser)
+- Imagem ocupando mais altura (aspect ratio próximo ao screenshot)
+- Label da categoria embaixo ou sobre a imagem como no design
+
+SEÇÃO “Como escolher o sofá perfeito”:
+- Virar coluna única
+- Cards 2x2 podem virar 1 coluna com espaçamento confortável
+- Manter ícones e títulos claros
+
+DEPOIMENTO:
+- Card central com padding menor no mobile
+- Tipografia ajustada para leitura
+
+BOTÃO WHATSAPP:
+- Manter flutuante no canto inferior direito (já existe)
+- Não sobrepor o footer (garantir margem e z-index corretos)
+
+========================
+IMPLEMENTAÇÃO (TÉCNICA)
+========================
+- Reaproveite o mesmo Header componente, mas com variações via Tailwind:
+  desktop: menu horizontal
+  mobile: hamburger + drawer
+
+- Use um componente:
+  components/layout/MobileDrawer.tsx
+ou dentro do Header, desde que fique organizado.
+
+- Evite bibliotecas pesadas. Pode usar:
+  - Headless UI Dialog
+  - Radix Dialog
+  - ou Drawer simples com state + transition (Tailwind)
+
+========================
+VALIDAÇÃO
+========================
+Depois de ajustar:
+- Desktop deve permanecer idêntico ao atual
+- Footer deve permanecer idêntico
+- Mobile deve ficar muito parecido ao screenshot fornecido
+- O drawer deve abrir/fechar corretamente e navegar entre páginas
+
+Faça as mudanças e mostre os arquivos alterados.

@@ -1,0 +1,176 @@
+Crie um projeto web completo em Next.js (App Router) + TypeScript + Tailwind, baseado nas telas do site de tapeçaria (sofás, cabeceiras, arte em tecido, guias e consultoria).
+
+OBJETIVO PRINCIPAL
+Padronizar a aplicação para que TODAS as páginas usem EXATAMENTE o mesmo Header e Footer da Home, aplicados via layout global (app/layout.tsx). Não pode existir header/footer duplicado dentro das páginas.
+
+ARQUITETURA OBRIGATÓRIA (feature-based)
+A estrutura do código deve ser baseada em:
+features/{route}/components
+features/{route}/sections
+features/{route}/data
+features/{route}/types
+features/{route}/utils
+e apenas componentes realmente globais ficam em /components.
+
+STACK
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS
+- lucide-react (ícones)
+- (Opcional) shadcn/ui apenas se necessário, mas prefira Tailwind puro
+
+ESTRUTURA DE PASTAS (crie exatamente assim)
+
+/app
+  /layout.tsx
+  /globals.css
+  /page.tsx
+  /sofas/page.tsx
+  /cabeceiras/page.tsx
+  /arte-em-tecido/page.tsx
+  /processo/page.tsx
+  /guia-de-design/page.tsx
+  /guia-de-design/[slug]/page.tsx
+  /produto/[slug]/page.tsx
+  /api/health/route.ts
+
+/components
+  /layout/Header.tsx
+  /layout/Footer.tsx
+  /layout/Container.tsx
+  /layout/WhatsAppFloatingButton.tsx
+  /ui/Button.tsx
+  /ui/Badge.tsx
+  /ui/Card.tsx
+  /ui/Input.tsx
+  /ui/Divider.tsx
+
+/features
+  /home
+    /components
+      HomeShell.tsx
+    /sections
+      Hero.tsx
+      Categories.tsx
+      GuideTeaser.tsx
+      Partners.tsx
+      Testimonial.tsx
+    /data
+      homeData.ts
+    /types
+      homeTypes.ts
+
+  /collections
+    /components
+      CollectionHeader.tsx
+      ProductGrid.tsx
+      ProductCard.tsx
+      FilterButton.tsx
+    /sections
+      HelpCTA.tsx
+    /data
+      collectionsData.ts
+    /types
+      collectionsTypes.ts
+    /utils
+      collectionsUtils.ts
+
+  /processo
+    /components
+      StepCard.tsx
+    /sections
+      ProcessHero.tsx
+      Steps.tsx
+      ProcessCTA.tsx
+    /data
+      processData.ts
+    /types
+      processTypes.ts
+
+  /guides
+    /components
+      GuideCard.tsx
+      GuideSidebar.tsx
+      QuickReferenceTable.tsx
+      PremiumHighlightCard.tsx
+    /sections
+      GuidesListHero.tsx
+      GuidesGrid.tsx
+      GuideContent.tsx
+    /data
+      guidesData.ts
+    /types
+      guidesTypes.ts
+    /utils
+      guidesUtils.ts
+
+  /product
+    /components
+      ProductGallery.tsx
+      ProductSpecs.tsx
+      ProductCTA.tsx
+      RelatedProducts.tsx
+    /sections
+      ProductHero.tsx
+      ProductDetails.tsx
+    /data
+      productData.ts
+    /types
+      productTypes.ts
+
+/lib
+  /utils.ts   (cn, helpers)
+  /seo.ts     (metadata helpers)
+
+/public
+  /images (placeholders)
+
+REGRAS DE LAYOUT (CRÍTICAS)
+1) Header e Footer são globais e únicos, devem existir SOMENTE em:
+   - /components/layout/Header.tsx
+   - /components/layout/Footer.tsx
+2) O app/layout.tsx deve ser o ÚNICO lugar onde Header/Footer aparecem.
+3) Páginas em /app/* NÃO podem importar Header/Footer diretamente.
+4) Botão flutuante do WhatsApp deve aparecer em TODAS as páginas via layout global:
+   - /components/layout/WhatsAppFloatingButton.tsx
+5) Header precisa ter:
+   - Logo "LINEAR STORE"
+   - links: Início, Sofás, Cabeceiras, Arte em Tecido, Processo, Guia de Design
+   - botão "Fale com um especialista"
+   - menu mobile hamburger funcional
+6) Footer precisa ter:
+   - coluna marca/descrição
+   - coluna coleções (links)
+   - coluna contato (endereço + telefone)
+   - ícones sociais
+7) Responsivo: layout mobile deve ficar semelhante ao screenshot (cards grandes, CTA visível, espaçamentos).
+
+PÁGINAS E IMPLEMENTAÇÃO
+- Home (/app/page.tsx): montar UI usando features/home/sections.
+- Coleções (/sofas, /cabeceiras, /arte-em-tecido):
+  reutilizar features/collections (mesmos componentes), alterando apenas o dataset (category).
+- Processo (/processo): usar features/processo/sections.
+- Guias (/guia-de-design): lista com cards de artigos usando features/guides.
+- Guia detalhe (/guia-de-design/[slug]): página com hero do artigo + conteúdo + sidebar com tabela de referência + premium highlight + mais guias.
+- Produto detalhe (/produto/[slug]): galeria, specs e CTA, com produtos relacionados.
+
+DADOS MOCKADOS (obrigatório agora)
+Criar datasets mockados dentro de /features/*/data, sem backend:
+- categorias (3 principais: Sofás Sob Medida, Cabeceiras Estofadas, Arte em Tecido)
+- produtos com slug, título, preço "a partir de", tags (best seller, sustentável, edição limitada), imagem placeholder
+- guias com slug, título, tempo de leitura, autor, capa, e conteúdo em blocos
+
+DESIGN (seguir estilo das telas)
+- Visual premium, tons neutros, botões arredondados
+- Hero com imagem de fundo e gradiente escuro
+- Cards com sombras suaves e bordas arredondadas
+- Tipografia elegante e hierarquia clara
+- CTAs iguais ao conceito das telas ("Conhecer Coleção", "Agendar Consultoria", "Conversar no WhatsApp")
+
+ENTREGA
+Quero o app rodando com:
+- npm install
+- npm run dev
+Sem erros de build.
+
+Não crie componentes duplicados por página: tudo deve ser reaproveitado via features e layout global.

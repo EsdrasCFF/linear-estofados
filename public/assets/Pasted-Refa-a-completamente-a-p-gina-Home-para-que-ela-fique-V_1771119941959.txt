@@ -1,0 +1,178 @@
+Refaça completamente a página Home para que ela fique VISUALMENTE idêntica ao screenshot enviado.
+
+Não interprete. Não simplifique. Não invente.
+Siga a estrutura exatamente como descrito abaixo.
+
+========================
+ESTRUTURA DA PÁGINA
+========================
+
+LAYOUT:
+- Fundo geral: cinza muito claro (#F5F5F5 ou similar)
+- Container central com max-width ~1200px
+- Espaçamento vertical generoso entre seções
+- Bordas arredondadas suaves nos blocos principais
+- Visual premium minimalista
+
+========================
+HEADER
+========================
+
+- Fundo branco
+- Logo à esquerda: ícone pequeno de sofá + texto "LINEAR STORE"
+- Menu central com links:
+  Início (ativo, sublinhado laranja)
+  Sofás
+  Cabeceiras
+  Arte em Tecido
+  Processo
+- Botão à direita:
+  "Fale com um especialista"
+  Cor: laranja suave
+  Bordas arredondadas
+- Avatar circular pequeno ao lado do botão
+
+Header fixo no topo.
+
+========================
+HERO SECTION
+========================
+
+- Grande imagem de sofá ocupando largura quase total
+- Container com borda arredondada grande
+- Overlay escuro (gradiente preto 60%)
+- Texto alinhado à esquerda
+
+Título grande (bem impactante):
+"Sofás pensados para o seu espaço e seu uso diário"
+
+Subtítulo:
+"Descubra o equilíbrio perfeito entre design autoral e o conforto que a sua rotina merece. Consultoria especializada para peças sob medida."
+
+Botões:
+1) Conhecer Coleção (laranja, destaque)
+2) Agendar Consultoria (escuro, outline)
+
+Texto e botões devem ficar posicionados à esquerda sobre a imagem.
+
+========================
+SEÇÃO: NOSSAS CATEGORIAS PRINCIPAIS
+========================
+
+Pequeno texto acima:
+"EXCLUSIVIDADE"
+
+Título:
+"Nossas Categorias Principais"
+
+Grid com 3 cards grandes:
+- Sofás Sob Medida
+- Cabeceiras Estofadas
+- Arte em Tecido
+
+Cada card:
+- Imagem grande
+- Bordas arredondadas
+- Texto branco no canto inferior esquerdo
+- Leve sombra
+- Hover com leve zoom na imagem
+
+========================
+SEÇÃO: COMO ESCOLHER O SOFÁ PERFEITO
+========================
+
+Layout em duas colunas:
+
+Coluna esquerda:
+Título:
+"Como escolher o sofá perfeito"
+
+Parágrafo explicativo curto
+
+Link:
+"Baixar Guia de Ergonomia"
+
+Coluna direita:
+Grid 2x2 com 4 cards:
+
+1) Densidade Ideal
+2) Tecidos Premium
+3) Proporções
+4) Garantia Vitalícia
+
+Cards:
+- Fundo branco
+- Bordas arredondadas
+- Ícone pequeno laranja no topo
+- Título
+- Texto pequeno explicativo
+
+========================
+SEÇÃO: PARCEIROS
+========================
+
+Fundo cinza claro
+Texto central:
+"NOSSOS PARCEIROS & PROJETOS"
+
+Abaixo:
+Blocos cinza simulando logos
+
+========================
+SEÇÃO: DEPOIMENTO
+========================
+
+Card central branco
+Sombra suave
+Bordas arredondadas grandes
+
+Texto do depoimento centralizado:
+
+"O processo de consultoria transformou minha sala..."
+
+Foto pequena circular da cliente abaixo
+Nome:
+Helena Viana
+Cargo:
+Arquiteta e Cliente
+
+========================
+FOOTER
+========================
+
+Fundo preto/cinza escuro
+
+Coluna 1:
+Logo + descrição curta da marca
+
+Coluna 2:
+Coleções
+Living Room
+Bedrooms
+Exclusive Fabrics
+Custom Designs
+
+Coluna 3:
+Contato
+Endereço
+Telefone
+
+Ícones sociais pequenos
+
+Botão flutuante verde no canto inferior direito:
+"Falar com especialista"
+
+========================
+REGRAS IMPORTANTES
+========================
+
+- Não simplifique layout
+- Use Tailwind
+- Espaçamentos generosos (py-20 ou similar)
+- Bordas arredondadas grandes (rounded-2xl ou 3xl)
+- Design elegante e sofisticado
+- Não crie estrutura diferente
+- Não mude textos
+- Não altere hierarquia
+
+Quero fidelidade visual à imagem.
