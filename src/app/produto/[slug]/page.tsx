@@ -1,11 +1,17 @@
 "use client";
 
-import { use } from "react";
+import { use, useState } from "react";
 import { Layout } from "@/components/layout/Layout";
-import { getProductBySlug } from "@/features/collections/data/collectionsData";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Check, ShieldCheck, Truck } from "lucide-react";
+import {
+  Check,
+  ShieldCheck,
+  Truck,
+  MessageCircle,
+  Ruler,
+  Weight,
+} from "lucide-react";
 import { useConsultationForm } from "@/hooks/use-consultation";
 import {
   Dialog,
@@ -25,21 +31,69 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useState } from "react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import type { ProductWithDimensions } from "@/lib/db/schema";
+import { formatPrice } from "@/lib/db/schema";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
+function buildWhatsAppUrl(productTitle: string): string {
+  const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "5511999999999";
+  const message = encodeURIComponent(
+    `Olá! Tenho interesse no produto: *${productTitle}*. Pode me dar mais informações?`
+  );
+  return `https://wa.me/${phone}?text=${message}`;
+}
+
 export default function ProductDetailPage({ params }: Props) {
   const { slug } = use(params);
-  const product = getProductBySlug(slug);
   const { form, mutation } = useConsultationForm();
   const [open, setOpen] = useState(false);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [selectedDimensionId, setSelectedDimensionId] = useState<string | null>(
+    null
+  );
 
-  if (!product) notFound();
+  const {
+    data: product,
+    isLoading,
+    isError,
+  } = useQuery<ProductWithDimensions>({
+    queryKey: ["product", slug],
+    queryFn: async () => {
+      const res = await fetch(`/api/products/${slug}`);
+      if (!res.ok) throw new Error("Produto não encontrado");
+      return res.json();
+    },
+  });
+
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="container mx-auto px-4 py-32 flex items-center justify-center">
+          <div className="text-center space-y-4">
+            <div className="w-10 h-10 border-2 border-[#D97706] border-t-transparent rounded-full animate-spin mx-auto" />
+            <p className="text-muted-foreground text-sm">
+              Carregando produto...
+            </p>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (isError || !product) notFound();
+
+  const activeDimension =
+    product.dimensions.find((d) => d.id === selectedDimensionId) ??
+    product.dimensions[0] ??
+    null;
+
+  const images = product.imageUrls ?? [];
 
   const onSubmit = (data: any) => {
     mutation.mutate(
@@ -50,85 +104,181 @@ export default function ProductDetailPage({ params }: Props) {
 
   return (
     <Layout>
-      <div className="container mx-auto px-4 lg:px-8 py-32">
+      <div className="container mx-auto px-4 lg:px-8 py-32 max-w-[1200px]">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-          {/* Image Gallery */}
+          {/* ── Galeria ── */}
           <div className="space-y-4">
-            <div className="aspect-[4/5] bg-secondary/20 rounded-lg overflow-hidden border border-border relative">
-              <Image
-                src={product.image}
-                alt={product.title}
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-            </div>
-            <div className="grid grid-cols-4 gap-4">
-              {[...Array(4)].map((_, i) => (
-                <div
-                  key={i}
-                  className="aspect-square bg-secondary/20 rounded cursor-pointer hover:ring-2 hover:ring-primary/50 transition-all relative overflow-hidden"
-                >
-                  <Image
-                    src={product.image}
-                    alt={product.title}
-                    fill
-                    className="object-cover opacity-70 hover:opacity-100"
-                  />
+            <div className="aspect-[4/5] bg-secondary/20 rounded-2xl overflow-hidden border border-border relative">
+              {images[activeImageIndex] ? (
+                <Image
+                  src={images[activeImageIndex]}
+                  alt={product.title}
+                  fill
+                  priority
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-secondary/30">
+                  <span className="text-muted-foreground text-sm">
+                    Sem imagem
+                  </span>
                 </div>
-              ))}
+              )}
             </div>
+
+            {images.length > 1 && (
+              <div className="grid grid-cols-4 gap-3">
+                {images.map((url, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setActiveImageIndex(i)}
+                    className={`aspect-square rounded-lg overflow-hidden border-2 transition-all relative ${
+                      i === activeImageIndex
+                        ? "border-[#D97706]"
+                        : "border-transparent hover:border-border"
+                    }`}
+                  >
+                    <Image
+                      src={url}
+                      alt={`${product.title} ${i + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="100px"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* Product Info */}
+          {/* ── Info ── */}
           <div>
-            <div className="mb-2 text-primary font-medium tracking-wide uppercase text-sm">
+            <p className="text-[#D97706] font-medium tracking-wide uppercase text-sm mb-2">
               {product.category.replace("-", " ")}
-            </div>
-            <h1 className="font-display text-4xl lg:text-5xl font-bold mb-4">
+            </p>
+            <h1 className="font-display text-4xl lg:text-5xl font-bold mb-2 leading-tight">
               {product.title}
             </h1>
-            <div className="text-3xl font-light mb-8">
-              R${" "}
-              {product.price.toLocaleString("pt-BR", {
-                minimumFractionDigits: 2,
-              })}
+
+            <div className="text-3xl font-light mb-6">
+              R$ {formatPrice(product.priceCents)}
               <span className="text-sm text-muted-foreground ml-2">
                 (Valor estimado)
               </span>
             </div>
 
-            <p className="text-lg text-foreground/80 leading-relaxed mb-8">
-              {product.description ||
-                "Uma peça de design exclusivo, feita para durar gerações. Personalize tecidos, acabamentos e medidas para se adequar perfeitamente ao seu espaço."}
-            </p>
+            {product.shortDescription && (
+              <p className="text-lg text-foreground/80 leading-relaxed mb-6">
+                {product.shortDescription}
+              </p>
+            )}
 
-            <div className="grid gap-4 mb-8">
-              {[
-                "Personalização total de tecidos e cores",
-                "Estrutura em madeira maciça certificada",
-                "Espumas de alta densidade para conforto duradouro",
-              ].map((item) => (
-                <div
-                  key={item}
-                  className="flex items-center gap-3 text-sm text-foreground/80"
-                >
-                  <Check className="w-5 h-5 text-primary" />
-                  <span>{item}</span>
-                </div>
-              ))}
+            {/* Tags */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              {product.material && (
+                <span className="bg-secondary text-secondary-foreground text-sm px-3 py-1 rounded-full border border-border/60">
+                  {product.material}
+                </span>
+              )}
+              {product.color && (
+                <span className="bg-secondary text-secondary-foreground text-sm px-3 py-1 rounded-full border border-border/60">
+                  {product.color}
+                </span>
+              )}
+              {product.weightKg && (
+                <span className="bg-secondary text-secondary-foreground text-sm px-3 py-1 rounded-full border border-border/60 flex items-center gap-1">
+                  <Weight className="w-3 h-3" />
+                  {product.weightKg} kg
+                </span>
+              )}
             </div>
 
-            <Separator className="my-8" />
+            {/* Diferenciais */}
+            {product.differentials && product.differentials.length > 0 && (
+              <div className="grid gap-3 mb-6">
+                {product.differentials.map((item, i) => (
+                  <div
+                    key={i}
+                    className="flex items-start gap-3 text-sm text-foreground/80"
+                  >
+                    <Check className="w-4 h-4 text-[#D97706] mt-0.5 shrink-0" />
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+            )}
 
-            <div className="flex flex-col sm:flex-row gap-4 mb-8">
+            {/* Dimensões */}
+            {product.dimensions.length > 0 && (
+              <div className="mb-6">
+                <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3 font-medium">
+                  Dimensões disponíveis
+                </p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {product.dimensions.map((dim) => (
+                    <button
+                      key={dim.id}
+                      onClick={() => setSelectedDimensionId(dim.id)}
+                      className={`px-4 py-2 rounded-lg border text-sm font-medium transition-all ${
+                        selectedDimensionId === dim.id ||
+                        (!selectedDimensionId &&
+                          product.dimensions[0]?.id === dim.id)
+                          ? "border-[#D97706] bg-[#D97706]/10 text-[#D97706]"
+                          : "border-border hover:border-[#D97706]/50"
+                      }`}
+                    >
+                      {dim.label}
+                    </button>
+                  ))}
+                </div>
+
+                {activeDimension && (
+                  <div className="flex items-center gap-3 text-sm text-muted-foreground bg-secondary/30 rounded-xl px-4 py-3">
+                    <Ruler className="w-4 h-4 shrink-0" />
+                    <span>
+                      {activeDimension.widthCm &&
+                        `L ${activeDimension.widthCm}cm`}
+                      {activeDimension.depthCm &&
+                        ` × P ${activeDimension.depthCm}cm`}
+                      {activeDimension.heightCm &&
+                        ` × A ${activeDimension.heightCm}cm`}
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <Separator className="my-6" />
+
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row gap-3 mb-6">
+              <a
+                href={buildWhatsAppUrl(product.title)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1"
+              >
+                <Button
+                  size="lg"
+                  className="w-full h-14 text-base bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-xl gap-2"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                  Consultar via WhatsApp
+                </Button>
+              </a>
+
               <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
-                  <Button size="lg" className="flex-1 h-14 text-lg">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="flex-1 h-14 text-base rounded-xl"
+                  >
                     Solicitar Orçamento
                   </Button>
                 </DialogTrigger>
-                <DialogContent>
+                <DialogContent className="sm:max-w-md">
                   <DialogHeader>
                     <DialogTitle>Interesse em: {product.title}</DialogTitle>
                     <DialogDescription>
@@ -139,7 +289,7 @@ export default function ProductDetailPage({ params }: Props) {
                   <Form {...form}>
                     <form
                       onSubmit={form.handleSubmit(onSubmit)}
-                      className="space-y-4 pt-4"
+                      className="space-y-4 pt-2"
                     >
                       <FormField
                         control={form.control}
@@ -161,10 +311,7 @@ export default function ProductDetailPage({ params }: Props) {
                           <FormItem>
                             <FormLabel>Email</FormLabel>
                             <FormControl>
-                              <Input
-                                placeholder="seu@email.com"
-                                {...field}
-                              />
+                              <Input placeholder="seu@email.com" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -180,6 +327,7 @@ export default function ProductDetailPage({ params }: Props) {
                               <Input
                                 placeholder="(11) 99999-9999"
                                 {...field}
+                                value={field.value ?? ""}
                               />
                             </FormControl>
                             <FormMessage />
@@ -194,8 +342,9 @@ export default function ProductDetailPage({ params }: Props) {
                             <FormLabel>Mensagem (Opcional)</FormLabel>
                             <FormControl>
                               <Textarea
-                                placeholder="Gostaria de saber mais sobre..."
+                                placeholder="Gostaria de saber mais sobre personalização..."
                                 {...field}
+                                value={field.value ?? ""}
                               />
                             </FormControl>
                             <FormMessage />
@@ -204,7 +353,7 @@ export default function ProductDetailPage({ params }: Props) {
                       />
                       <Button
                         type="submit"
-                        className="w-full"
+                        className="w-full bg-[#D97706] hover:bg-[#B45309] text-white"
                         disabled={mutation.isPending}
                       >
                         {mutation.isPending
@@ -215,23 +364,16 @@ export default function ProductDetailPage({ params }: Props) {
                   </Form>
                 </DialogContent>
               </Dialog>
-
-              <Button
-                variant="outline"
-                size="lg"
-                className="flex-1 h-14 text-lg"
-              >
-                Baixar Catálogo
-              </Button>
             </div>
 
-            <div className="flex justify-between items-center text-xs text-muted-foreground border p-4 rounded bg-secondary/10">
+            {/* Trust badges */}
+            <div className="flex justify-between items-center text-xs text-muted-foreground border border-border/60 p-4 rounded-xl bg-secondary/10">
               <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4" />
+                <ShieldCheck className="w-4 h-4 text-[#D97706]" />
                 Garantia de 5 anos
               </div>
               <div className="flex items-center gap-2">
-                <Truck className="w-4 h-4" />
+                <Truck className="w-4 h-4 text-[#D97706]" />
                 Entrega em todo Brasil
               </div>
             </div>
