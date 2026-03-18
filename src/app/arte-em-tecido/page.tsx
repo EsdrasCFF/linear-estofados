@@ -1,5 +1,15 @@
 import { CollectionPage } from "@/features/collections/components/CollectionPage";
+import { getProductsByCategory } from "@/lib/db/queries";
 
-export default function ArteEmTecidoPage() {
-  return <CollectionPage category="arte-em-tecido" title="Arte em Tecido" />;
+export const revalidate = 60;
+
+export default async function ArteEmTecidoPage() {
+  const products = await getProductsByCategory("arte-em-tecido");
+  return (
+    <CollectionPage
+      title="Arte em Tecido"
+      description="Peças únicas que contam histórias — bordados artesanais e tecidos naturais que elevam qualquer ambiente."
+      products={products}
+    />
+  );
 }
