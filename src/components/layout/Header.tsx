@@ -47,7 +47,14 @@ export function Header() {
           href="/"
           className="flex items-center gap-2 font-display text-xl font-bold tracking-tight text-foreground"
         >
-          <Sofa className="w-6 h-6 text-[#D97706]" />
+          <div className="relative w-8 h-8 shrink-0">
+            <Image
+              src="/logo.png"
+              alt="Linear Store"
+              fill
+              className="object-contain"
+            />
+          </div>
           <span>LINEAR STORE</span>
         </Link>
 
