@@ -5,19 +5,19 @@ const categories = [
   {
     id: "sofas",
     title: "Sofás Sob Medida",
-    image: "/assets/categorias_1771119344241.png",
+    image: "/categories/sofa-cover-2.png",
     link: "/sofas",
   },
   {
     id: "cabeceiras",
     title: "Cabeceiras Estofadas",
-    image: "/assets/categorias_1771119350219.png",
+    image: "/categories/headboard-cover.png",
     link: "/cabeceiras",
   },
   {
     id: "arte",
     title: "Arte em Tecido",
-    image: "/assets/home_1_1771119344243.png",
+    image: "/categories/fabric-art-cover.png",
     link: "/arte-em-tecido",
   },
 ];

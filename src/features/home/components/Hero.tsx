@@ -12,7 +12,7 @@ export function Hero() {
         <div className="relative min-h-[440px] md:h-[600px] rounded-[2rem] md:rounded-3xl overflow-hidden group">
           {/* Background Image */}
           <Image
-            src="/assets/home_1771119792349.png"
+            src="/home/bg-banner.png"
             alt="Linear Store Hero"
             fill
             priority
