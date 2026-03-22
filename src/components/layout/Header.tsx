@@ -16,9 +16,9 @@ import Image from "next/image";
 
 const links = [
   { href: "/", label: "Início" },
-  { href: "/sofas", label: "Sofás" },
-  { href: "/cabeceiras", label: "Cabeceiras" },
-  { href: "/arte-em-tecido", label: "Arte em Tecido" },
+  { href: "/collections", label: "Coleções" },
+  // { href: "/cabeceiras", label: "Cabeceiras" },
+  // { href: "/arte-em-tecido", label: "Arte em Tecido" },
   { href: "/processo", label: "Processo" },
   { href: "/guia-de-design", label: "Guia de Design" },
 ];
@@ -55,7 +55,7 @@ export function Header() {
               className="object-contain"
             />
           </div>
-          <span>LINEAR STORE</span>
+          <span>LINEAR ESTOFADOS</span>
         </Link>
 
         {/* Desktop Navigation */}

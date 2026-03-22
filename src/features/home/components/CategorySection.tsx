@@ -1,5 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const categories = [
   {
@@ -23,11 +25,20 @@ const categories = [
 ];
 
 export function CategorySection() {
+  const pathname = usePathname();
+
+  console.log(pathname);
+
   return (
     <section className="py-12 md:py-20 bg-[#F5F5F5]">
       <div className="container mx-auto px-4 lg:px-8 max-w-[1200px]">
         <div className="mb-8 md:mb-12">
-          <span className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold mb-2 block">
+          <span
+            className={cn(
+              "text-[10px] md:text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold mb-2 block",
+              pathname.includes("collections") ? "mt-4" : ""
+            )}
+          >
             EXCLUSIVIDADE
           </span>
           <h2 className="text-2xl md:text-4xl font-bold text-foreground">
