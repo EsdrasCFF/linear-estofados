@@ -54,6 +54,7 @@ export default function ProductDetailPage({ params }: Props) {
   const { form, mutation } = useConsultationForm();
   const [open, setOpen] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [zoomed, setZoomed] = useState(false);
   const [selectedDimensionId, setSelectedDimensionId] = useState<string | null>(
     null
   );
@@ -108,7 +109,10 @@ export default function ProductDetailPage({ params }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
           {/* ── Galeria ── */}
           <div className="space-y-4">
-            <div className="aspect-[4/5] bg-secondary/20 rounded-2xl overflow-hidden border border-border relative">
+            <div
+              className="aspect-[4/5] bg-[#F5F5F3] rounded-2xl overflow-hidden border border-border relative cursor-zoom-in"
+              onClick={() => setZoomed(true)}
+            >
               {images[activeImageIndex] ? (
                 <Image
                   src={images[activeImageIndex]}
