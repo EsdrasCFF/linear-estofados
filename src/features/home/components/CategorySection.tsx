@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -26,8 +28,6 @@ const categories = [
 
 export function CategorySection() {
   const pathname = usePathname();
-
-  console.log(pathname);
 
   return (
     <section className="py-12 md:py-20 bg-[#F5F5F5]">
