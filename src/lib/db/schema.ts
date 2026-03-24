@@ -17,6 +17,7 @@ export const categoryEnum = pgEnum("category", [
   "sofas",
   "cabeceiras",
   "arte-em-tecido",
+  "poltronas",
 ]);
 
 // ─── Products ─────────────────────────────────────────────────────────────────

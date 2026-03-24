@@ -31,7 +31,7 @@ function groupProductsWithDimensions(rows: JoinRow[]): ProductWithDimensions[] {
 // ─── Queries públicas ─────────────────────────────────────────────────────────
 
 export async function getProductsByCategory(
-  category: "sofas" | "cabeceiras" | "arte-em-tecido"
+  category: "sofas" | "cabeceiras" | "arte-em-tecido" | "poltronas"
 ): Promise<ProductWithDimensions[]> {
   const rows = await db
     .select()

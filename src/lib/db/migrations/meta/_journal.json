@@ -8,6 +8,13 @@
       "when": 1773832798454,
       "tag": "0000_groovy_mastermind",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1774313566106,
+      "tag": "0001_smiling_mister_fear",
+      "breakpoints": true
     }
   ]
 }

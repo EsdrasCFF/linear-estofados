@@ -13,11 +13,17 @@ const categories = [
     link: "/sofas",
   },
   {
-    id: "cabeceiras",
-    title: "Cabeceiras Estofadas",
-    image: "/categories/headboard-cover.png",
-    link: "/cabeceiras",
+    id: "poltronas",
+    title: "Poltronas",
+    image: "/categories/poltrona-cover.png",
+    link: "/poltronas",
   },
+  // {
+  //   id: "cabeceiras",
+  //   title: "Cabeceiras Estofadas",
+  //   image: "/categories/headboard-cover.png",
+  //   link: "/cabeceiras",
+  // },
   {
     id: "arte",
     title: "Arte em Tecido",
